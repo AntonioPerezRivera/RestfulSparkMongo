@@ -1,7 +1,7 @@
 package com.spark.example;
  
 import com.mongodb.*;
-import com.spark.example.resource.UserResource;
+import com.spark.example.controller.UserController;
 import com.spark.example.service.UserService;
 
 import static spark.Spark.setIpAddress;
@@ -16,13 +16,18 @@ public class SparkApplication {
         setIpAddress(IP_ADDRESS);
         setPort(PORT);
         staticFileLocation("/public");
-        new UserResource(new UserService(mongo()));
+        initialize();
     }
  
     private static DB mongo() throws Exception {
         MongoClient mongoClient = new MongoClient("localhost:27017");
         System.out.println(mongoClient.getDatabaseNames());
         return mongoClient.getDB("spark");
+    }
+    
+    private static void initialize() throws Exception{
+    	new UserController(new UserService(mongo()));
+    	new BookController(new BookService(mongo()));
     }
         
 }

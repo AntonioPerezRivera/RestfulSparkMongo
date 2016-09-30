@@ -1,4 +1,4 @@
-package com.spark.example.resource;
+package com.spark.example.controller;
  
 import com.spark.example.JsonTransformer;
 import com.spark.example.service.UserService;
@@ -6,13 +6,13 @@ import com.spark.example.service.UserService;
 import static spark.Spark.get;
 import static spark.Spark.post;
  
-public class UserResource {
+public class UserController {
  
     private static final String CONTEXT = "spark";
  
     private final UserService userService;
  
-    public UserResource(UserService userServ) {
+    public UserController(UserService userServ) {
         this.userService = userServ;
         setupEndpoints();
     }
@@ -26,13 +26,10 @@ public class UserResource {
         }, new JsonTransformer());
  
         get(CONTEXT + "/user/:id", "application/json", (request, response)
- 
-                -> userService.find(request.params(":id")), new JsonTransformer());
+        		-> userService.find(request.params(":id")), new JsonTransformer());
  
         get(CONTEXT + "/user", "application/json", (request, response)
- 
-                -> userService.findAll(), new JsonTransformer());
+        		-> userService.findAll(), new JsonTransformer());
     }
- 
  
 }
