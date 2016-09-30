@@ -32,7 +32,7 @@ public class BookController {
         get(CONTEXT + "/book", "application/json", (request, response)
         		-> bookService.findAll(), new JsonTransformer());
         
-        put(CONTEXT + "/user/:id", "application/json", (request, response)
+        put(CONTEXT + "/book/:id", "application/json", (request, response)
         		-> bookService.updateBook(request.params(":id"), request.body()), new JsonTransformer());
     }
  
