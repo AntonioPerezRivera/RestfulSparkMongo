@@ -43,4 +43,19 @@ public class UserService {
     public User find(String id) {
         return new User((BasicDBObject) collection.findOne(new BasicDBObject("_id", new ObjectId(id))));
     }
+    
+    public User updateUser(String userId, String body){
+    	User user = new Gson().fromJson(body, User.class);
+    	BasicDBObject newQuery = new BasicDBObject("_id", new ObjectId(userId))
+    												.append("name", user.getName())
+    												.append("surname", user.getSurname())
+    												.append("address", user.getAddress())
+    												.append("email", user.getEmail())
+    												.append("createdOn", user.getCreatedOn());
+    												
+    	BasicDBObject searchQuery = new BasicDBObject().append("_id", userId);
+    	collection.update(searchQuery,newQuery);
+    	return find(userId);
+    }
+    
 }
