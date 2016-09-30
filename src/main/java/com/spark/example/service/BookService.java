@@ -3,7 +3,6 @@ package com.spark.example.service;
 import com.google.gson.Gson;
 import com.mongodb.*;
 import com.spark.example.model.Book;
-import com.spark.example.model.User;
 
 import org.bson.types.ObjectId;
  
@@ -21,13 +20,13 @@ public class BookService {
         this.collection = db.getCollection("books");
     }
  
-    public List<User> findAll() {
-        List<User> books = new ArrayList<>();
+    public List<Book> findAll() {
+        List<Book> books = new ArrayList<>();
         DBCursor dbObjects = collection.find();
         while (dbObjects.hasNext()) {
             DBObject dbObject = dbObjects.next();
-            System.out.println(new User((BasicDBObject) dbObject));
-            books.add(new User((BasicDBObject) dbObject));
+            System.out.println(new Book((BasicDBObject) dbObject));
+            books.add(new Book((BasicDBObject) dbObject));
         }
         return books;
     }
@@ -44,16 +43,18 @@ public class BookService {
         return new Book((BasicDBObject) collection.findOne(new BasicDBObject("_id", new ObjectId(id))));
     }
 
-	public Book updateBook(String bookId, String body) {
+    public Book updateBook(String bookId, String body){
     	Book book = new Gson().fromJson(body, Book.class);
-    	BasicDBObject newQuery = new BasicDBObject("_id", new ObjectId(bookId))
-    												.append("title", book.getTitle())
-    												.append("author", book.getAuthor())
-    												.append("isbn", book.getIsbn())
-    												.append("createdOn", book.getCreatedOn());
-    												
-    	BasicDBObject searchQuery = new BasicDBObject().append("_id", bookId);
-    	collection.update(searchQuery,newQuery);
+    	System.out.println(book.getTitle());
+    	DBObject searchQuery = new BasicDBObject("_id", new ObjectId(bookId));
+    	DBObject cambios = new BasicDBObject()
+    								.append("name", book.getTitle())
+    								.append("surname", book.getAuthor())
+    								.append("address", book.getIsbn());
+    	
+    	DBObject update = new BasicDBObject("$set", cambios);
+    	
+    	collection.updateMulti(searchQuery, update);
     	return find(bookId);
-	}
+    }
 }
