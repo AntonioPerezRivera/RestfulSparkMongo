@@ -5,6 +5,7 @@ import com.spark.example.service.BookService;
  
 import static spark.Spark.get;
 import static spark.Spark.post;
+import static spark.Spark.put;
  
 public class BookController {
  
@@ -30,6 +31,9 @@ public class BookController {
  
         get(CONTEXT + "/book", "application/json", (request, response)
         		-> bookService.findAll(), new JsonTransformer());
+        
+        put(CONTEXT + "/user/:id", "application/json", (request, response)
+        		-> bookService.updateBook(request.params(":id"), request.body()), new JsonTransformer());
     }
  
 }
