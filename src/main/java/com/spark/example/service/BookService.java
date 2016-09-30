@@ -32,7 +32,7 @@ public class BookService {
         return books;
     }
  
-    public void createNewUser(String body) {
+    public void createNewBook(String body) {
         Book book = new Gson().fromJson(body, Book.class);
         collection.insert(new BasicDBObject("title", book.getTitle())
         		.append("author", book.getAuthor())
