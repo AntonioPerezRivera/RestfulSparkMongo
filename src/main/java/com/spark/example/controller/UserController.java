@@ -1,7 +1,6 @@
 package com.spark.example.controller;
  
 import com.google.gson.Gson;
-import com.spark.example.JsonTransformer;
 import com.spark.example.service.UserService;
  
 import static spark.Spark.get;
@@ -26,7 +25,7 @@ public class UserController {
             userService.createNewUser(request.body());
             response.status(201);
             return response;
-        }, new JsonTransformer());
+        }, gson::toJson);
  
         get(CONTEXT + "/user/:id", "application/json", (request, response)
         		-> userService.find(request.params(":id")), gson::toJson);
