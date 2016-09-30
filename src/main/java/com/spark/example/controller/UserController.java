@@ -5,6 +5,7 @@ import com.spark.example.service.UserService;
  
 import static spark.Spark.get;
 import static spark.Spark.post;
+import static spark.Spark.put;
  
 public class UserController {
  
@@ -30,6 +31,9 @@ public class UserController {
  
         get(CONTEXT + "/user", "application/json", (request, response)
         		-> userService.findAll(), new JsonTransformer());
+        
+        put(CONTEXT + "/user/:id", "application/json", (request, response)
+        		-> userService.updateUser(request.params(":id"), request.body()), new JsonTransformer());
     }
  
 }
