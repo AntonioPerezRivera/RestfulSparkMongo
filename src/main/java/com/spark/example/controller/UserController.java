@@ -1,5 +1,6 @@
 package com.spark.example.controller;
  
+import com.google.gson.Gson;
 import com.spark.example.JsonTransformer;
 import com.spark.example.service.UserService;
  
@@ -12,6 +13,7 @@ public class UserController {
     private static final String CONTEXT = "spark";
  
     private final UserService userService;
+    private final Gson gson = new Gson();
  
     public UserController(UserService userServ) {
         this.userService = userServ;
@@ -27,13 +29,13 @@ public class UserController {
         }, new JsonTransformer());
  
         get(CONTEXT + "/user/:id", "application/json", (request, response)
-        		-> userService.find(request.params(":id")), new JsonTransformer());
+        		-> userService.find(request.params(":id")), gson::toJson);
  
         get(CONTEXT + "/user", "application/json", (request, response)
-        		-> userService.findAll(), new JsonTransformer());
+        		-> userService.findAll(), gson::toJson);
         
         put(CONTEXT + "/user/:id", "application/json", (request, response)
-        		-> userService.updateUser(request.params(":id"), request.body()), new JsonTransformer());
+        		-> userService.updateUser(request.params(":id"), request.body()), gson::toJson);
     }
  
 }
