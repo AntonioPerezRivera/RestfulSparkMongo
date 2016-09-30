@@ -43,4 +43,17 @@ public class BookService {
     public Book find(String id) {
         return new Book((BasicDBObject) collection.findOne(new BasicDBObject("_id", new ObjectId(id))));
     }
+
+	public Book updateBook(String bookId, String body) {
+    	Book book = new Gson().fromJson(body, Book.class);
+    	BasicDBObject newQuery = new BasicDBObject("_id", new ObjectId(bookId))
+    												.append("title", book.getTitle())
+    												.append("author", book.getAuthor())
+    												.append("isbn", book.getIsbn())
+    												.append("createdOn", book.getCreatedOn());
+    												
+    	BasicDBObject searchQuery = new BasicDBObject().append("_id", bookId);
+    	collection.update(searchQuery,newQuery);
+    	return find(bookId);
+	}
 }
