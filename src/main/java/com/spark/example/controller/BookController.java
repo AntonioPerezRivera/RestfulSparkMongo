@@ -1,6 +1,6 @@
 package com.spark.example.controller;
  
-import com.spark.example.JsonTransformer;
+import com.google.gson.Gson;
 import com.spark.example.service.BookService;
  
 import static spark.Spark.get;
@@ -10,8 +10,10 @@ import static spark.Spark.put;
 public class BookController {
  
     private static final String CONTEXT = "spark";
+    
  
     private final BookService bookService;
+    private final Gson gson = new Gson();
  
     public BookController(BookService bookServ) {
         this.bookService = bookServ;
@@ -24,17 +26,17 @@ public class BookController {
             bookService.createNewBook(request.body());
             response.status(201);
             return response;
-        }, new JsonTransformer());
+        }, gson::toJson);
  
         get(CONTEXT + "/book/:id", "application/json", (request, response)
-        		-> bookService.find(request.params(":id")), new JsonTransformer());
+        		-> bookService.find(request.params(":id")), gson::toJson);
  
         get(CONTEXT + "/book", "application/json", (request, response)
-        		-> bookService.findAll(), new JsonTransformer());
+        		-> bookService.findAll(), gson::toJson);
         
         // Inclusion del metodo put TODO: probar en usuario
         put(CONTEXT + "/book/:id", "application/json", (request, response)
-        		-> bookService.updateBook(request.params(":id"), request.body()), new JsonTransformer());
+        		-> bookService.updateBook(request.params(":id"), request.body()), gson::toJson);
     }
  
 }
